@@ -81,6 +81,12 @@ body{
     color: rgba(255, 255, 255, .75);
     font-size: 1rem;
 }
+#dark .output .previous-operand{
+    color: black;
+}
+#dark .output .current-operand{
+    color: #474747;
+}
 .output .current-operand{
     color: white;
     font-size: 2rem;
