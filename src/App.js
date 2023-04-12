@@ -1,7 +1,9 @@
-import { useReducer } from "react";
+import { createContext, useReducer, useState } from "react";
 import "./App.css";
 import DigitButton from "./DigitButton";
 import OperationButton from "./OperationButton";
+import ReactSwitch from "react-switch";
+export const ThemeContext = createContext("null");
 
 export const ACTIONS = {
   ADD_DIGIT: "add-digit",
@@ -130,40 +132,51 @@ function App() {
     {}
   );
 
+  const [theme, setTheme] = useState("light");
+  const toggleTheme = () => {
+    setTheme((curr) => (curr === "light" ? "dark" : "light"))
+  }
   return (
-    <div>
-      <h1 style={{textAlign:"center",color:"#393646", fontFamily:"cursive"}}>Calculator</h1>
-    <div className="calculator-grid">
-     
-      <div className="output">
-        <div className="previous-operand">
-          {formatOperand(previousOperand)} {operation}
+    <ThemeContext.Provider value={{theme, setTheme}}>
+      <div id={theme}>
+        <div id="calci">
+          <h1 style={{textAlign:"center",fontFamily:"cursive"}}>Calculator</h1>
+          <div className="calculator-grid">
+            <div className="output">
+            <div className="previous-operand">
+              {formatOperand(previousOperand)} {operation}
+            </div>
+            <div className="current-operand">{formatOperand(currentOperand)}</div>
+          </div>
+          <button className="span-two" onClick={() => dispatch({type: ACTIONS.CLEAR})}>AC</button>
+          <button onClick={()=> dispatch({type: ACTIONS.DELETE_DIGIT})}>DEL</button>
+          <OperationButton operation="÷" dispatch={dispatch} />
+          <DigitButton digit="1" dispatch={dispatch} />
+          <DigitButton digit="2" dispatch={dispatch} />
+          <DigitButton digit="3" dispatch={dispatch} />
+
+          <OperationButton operation="*" dispatch={dispatch} />
+          <DigitButton digit="4" dispatch={dispatch} />
+          <DigitButton digit="5" dispatch={dispatch} />
+          <DigitButton digit="6" dispatch={dispatch} />
+
+          <OperationButton operation="+" dispatch={dispatch} />
+          <DigitButton digit="7" dispatch={dispatch} />
+          <DigitButton digit="8" dispatch={dispatch} />
+          <DigitButton digit="9" dispatch={dispatch} />
+
+          <OperationButton operation="-" dispatch={dispatch} />
+          <DigitButton digit="." dispatch={dispatch} />
+          <DigitButton digit="0" dispatch={dispatch} />
+          <button className="span-two" onClick={() => dispatch({ type: ACTIONS.EVALUATE })}>=</button>
+          </div>
         </div>
-        <div className="current-operand">{formatOperand(currentOperand)}</div>
+        <div className="switch">
+          <label>{theme === "light" ? "Light Mode " : "Dark Mode "} &nbsp;</label>
+           <ReactSwitch onChange={toggleTheme} checked={theme === "dark"}/>
+        </div>
       </div>
-      <button className="span-two" onClick={() => dispatch({type: ACTIONS.CLEAR})}>AC</button>
-      <button onClick={()=> dispatch({type: ACTIONS.DELETE_DIGIT})}>DEL</button>
-      <OperationButton operation="÷" dispatch={dispatch} />
-      <DigitButton digit="1" dispatch={dispatch} />
-      <DigitButton digit="2" dispatch={dispatch} />
-      <DigitButton digit="3" dispatch={dispatch} />
-
-      <OperationButton operation="*" dispatch={dispatch} />
-      <DigitButton digit="4" dispatch={dispatch} />
-      <DigitButton digit="5" dispatch={dispatch} />
-      <DigitButton digit="6" dispatch={dispatch} />
-
-      <OperationButton operation="+" dispatch={dispatch} />
-      <DigitButton digit="7" dispatch={dispatch} />
-      <DigitButton digit="8" dispatch={dispatch} />
-      <DigitButton digit="9" dispatch={dispatch} />
-
-      <OperationButton operation="-" dispatch={dispatch} />
-      <DigitButton digit="." dispatch={dispatch} />
-      <DigitButton digit="0" dispatch={dispatch} />
-      <button className="span-two" onClick={() => dispatch({ type: ACTIONS.EVALUATE })}>=</button>
-    </div>
-    </div>
+    </ThemeContext.Provider>
     
   );
 }
